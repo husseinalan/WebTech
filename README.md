@@ -1,3 +1,4 @@
+[![CI](https://github.com/husseinalan/WebTech/actions/workflows/tests.yml/badge.svg)](https://github.com/husseinalan/WebTech/actions/workflows/tests.yml)
 # WebTech
 
 ## Das Projekt ist eine „Webseite für pflanzen-Gießen“ zu erstellen.
