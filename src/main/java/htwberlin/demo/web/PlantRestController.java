@@ -13,6 +13,8 @@ import java.util.List;
 @RestController
 public class PlantRestController {
 
+    private List<Plant> plants;
+
     private final PlantService plantService; // Repository-Injektion ermöglichen
 
     public PlantRestController(PlantService plantService) {
