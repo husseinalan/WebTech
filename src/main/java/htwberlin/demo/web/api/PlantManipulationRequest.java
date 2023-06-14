@@ -11,7 +11,7 @@ public class PlantManipulationRequest {
         this.description = description;
         this.wateringIntervalDays = wateringIntervalDays;
     }
-
+    public PlantManipulationRequest(){}
     public String getName() {
         return name;
     }

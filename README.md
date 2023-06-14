@@ -2,7 +2,6 @@
 # WebTech
 
 ## Das Projekt ist eine „Webseite für pflanzen-Gießen“ zu erstellen.
-
 ## Die Webseite soll die Folgenden Funktionen haben
 
 ## Ein Login-System: Benutzer können sich auf der Webseite anmelden und ihre Pflanzen verwalten.
