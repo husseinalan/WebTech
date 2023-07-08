@@ -2,6 +2,8 @@ package htwberlin.demo.persistence;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 
 @Entity(name = "plants")
 public class PlantEntity {
@@ -20,16 +22,26 @@ public class PlantEntity {
     @Column(name = "watering_interval_days", nullable = false)
     private Integer wateringIntervalDays;
 
-    public PlantEntity(String name, Integer wateringIntervalDays) {
-        this.name = name;
-        this.wateringIntervalDays = wateringIntervalDays;
+    @Column(name = "image")
+    private byte[] image ;
+
+    private LocalDateTime nextWeteringTime ;
+
+    public LocalDateTime getNextWeteringTime() {
+        return nextWeteringTime;
     }
+
+    public void setNextWeteringTime(LocalDateTime nextWeteringTime) {
+        this.nextWeteringTime = nextWeteringTime;
+    }
+
 
     public PlantEntity(String name, String description, Integer wateringIntervalDays) {
         this.name = name;
         this.description = description;
         this.wateringIntervalDays = wateringIntervalDays;
     }
+
 
     protected PlantEntity() {}
 
@@ -60,4 +72,5 @@ public class PlantEntity {
     public void setWateringIntervalDays(Integer wateringIntervalDays) {
         this.wateringIntervalDays = wateringIntervalDays;
     }
+
 }

@@ -6,7 +6,9 @@ import htwberlin.demo.persistence.PlantRepository;
 import htwberlin.demo.web.api.PlantManipulationRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,34 +23,44 @@ public class PlantService {
     public List<Plant> findAll() {
         List<PlantEntity> plants = plantRepository.findAll();
         return plants.stream()
-                .map(this::transforEntity)
+                .map(this::transformEntity)
                 .collect(Collectors.toList());
     }
 
     public Plant findById(Long id) {
-        var plantEntity = plantRepository.findById(id);
-        return plantEntity.map(this::transforEntity).orElse(null);
+        Optional<PlantEntity> plantEntityOptional = plantRepository.findById(id);
+        return plantEntityOptional.map(this::transformEntity).orElse(null);
     }
 
     public Plant create(PlantManipulationRequest request) {
-        var plantEntity = new PlantEntity(request.getName(), request.getDescription(), request.getWateringIntervalDays());
+        PlantEntity plantEntity = new PlantEntity(request.getName(), request.getDescription(), request.getWateringIntervalDays());
+
+        // Set the next watering time
+        LocalDateTime nextWateringTime = LocalDateTime.now().plusDays(request.getWateringIntervalDays());
+        plantEntity.setNextWeteringTime(nextWateringTime);
+
         plantEntity = plantRepository.save(plantEntity);
-        return transforEntity(plantEntity);
+        return transformEntity(plantEntity);
     }
 
+
     public Plant update(Long id, PlantManipulationRequest request) {
-        var plantEntityOptional = plantRepository.findById(id);
+        Optional<PlantEntity> plantEntityOptional = plantRepository.findById(id);
         if (plantEntityOptional.isEmpty()) {
             return null;
         }
 
-        var plantEntity = plantEntityOptional.get();
+        PlantEntity plantEntity = plantEntityOptional.get();
         plantEntity.setName(request.getName());
         plantEntity.setDescription(request.getDescription());
         plantEntity.setWateringIntervalDays(request.getWateringIntervalDays());
-        plantEntity = plantRepository.save(plantEntity);
 
-        return transforEntity(plantEntity);
+        // Set the next watering time
+        LocalDateTime nextWateringTime = LocalDateTime.now().plusDays(request.getWateringIntervalDays());
+        plantEntity.setNextWeteringTime(nextWateringTime);
+
+        plantEntity = plantRepository.save(plantEntity);
+        return transformEntity(plantEntity);
     }
 
     public boolean deleteById(Long id) {
@@ -60,7 +72,7 @@ public class PlantService {
         return true;
     }
 
-    private Plant transforEntity(PlantEntity plantEntity) {
+    private Plant transformEntity(PlantEntity plantEntity) {
         return new Plant(
                 plantEntity.getName(),
                 plantEntity.getDescription(),
@@ -68,4 +80,5 @@ public class PlantService {
                 plantEntity.getId()
         );
     }
+
 }

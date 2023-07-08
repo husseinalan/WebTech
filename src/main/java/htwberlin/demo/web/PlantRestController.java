@@ -3,9 +3,15 @@ package htwberlin.demo.web;
 import htwberlin.demo.web.api.Plant;
 import htwberlin.demo.service.PlantService;
 import htwberlin.demo.web.api.PlantManipulationRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -27,9 +33,9 @@ public class PlantRestController {
     }
 
     @GetMapping(path = "/api/v1/plants/{id}")
-    public ResponseEntity<Plant> fetchPlantById(@PathVariable Long id){
+    public ResponseEntity<Plant> fetchPlantById(@PathVariable Long id) {
         var plant = plantService.findById(id);
-        return plant != null? ResponseEntity.ok(plant) : ResponseEntity.notFound().build();
+        return plant != null ? ResponseEntity.ok(plant) : ResponseEntity.notFound().build();
     }
 
     @PostMapping(path = "/api/v1/plants")
@@ -40,15 +46,15 @@ public class PlantRestController {
     }
 
     @PutMapping(path = "/api/v1/plants/{id}")
-    public ResponseEntity<Plant> udpatePlat(@PathVariable Long id, @RequestBody PlantManipulationRequest request){
-     var plant = plantService.update(id, request);
-        return plant != null? ResponseEntity.ok(plant) : ResponseEntity.notFound().build();
+    public ResponseEntity<Plant> updatePlant(@PathVariable Long id, @RequestBody PlantManipulationRequest request) {
+        var plant = plantService.update(id, request);
+        return plant != null ? ResponseEntity.ok(plant) : ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping (path = "/api/v1/plants/{id}")
+    @DeleteMapping(path = "/api/v1/plants/{id}")
     public ResponseEntity<Void> deletePlant(@PathVariable Long id) {
         boolean successful = plantService.deleteById(id);
-        return successful? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+        return successful ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
 
 }
