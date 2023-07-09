@@ -7,6 +7,9 @@ public class ReminderRequest {
     private LocalDateTime dateTime;
     private String message;
 
+    public ReminderRequest(LocalDateTime now, String waterThePlant) {
+    }
+
     public Long getPlantId() {
         return plantId;
     }
