@@ -37,12 +37,15 @@ public class PlantService {
 
         // Set the next watering time
         LocalDateTime nextWateringTime = LocalDateTime.now().plusDays(request.getWateringIntervalDays());
-        plantEntity.setNextWeteringTime(nextWateringTime);
+        plantEntity.setNextWateringTime(nextWateringTime);
 
         plantEntity = plantRepository.save(plantEntity);
+
+        // Set the ID of the created entity
+        plantEntity.setId(plantEntity.getId());
+
         return transformEntity(plantEntity);
     }
-
 
     public Plant update(Long id, PlantManipulationRequest request) {
         Optional<PlantEntity> plantEntityOptional = plantRepository.findById(id);
@@ -57,11 +60,16 @@ public class PlantService {
 
         // Set the next watering time
         LocalDateTime nextWateringTime = LocalDateTime.now().plusDays(request.getWateringIntervalDays());
-        plantEntity.setNextWeteringTime(nextWateringTime);
+        plantEntity.setNextWateringTime(nextWateringTime);
 
         plantEntity = plantRepository.save(plantEntity);
+
+        // Set the ID of the updated entity
+        plantEntity.setId(plantEntity.getId());
+
         return transformEntity(plantEntity);
     }
+
 
     public boolean deleteById(Long id) {
         if (!plantRepository.existsById(id)) {
@@ -72,13 +80,19 @@ public class PlantService {
         return true;
     }
 
-    private Plant transformEntity(PlantEntity plantEntity) {
-        return new Plant(
-                plantEntity.getName(),
-                plantEntity.getDescription(),
-                plantEntity.getWateringIntervalDays(),
-                plantEntity.getId()
-        );
+    private Plant transformEntity(PlantEntity entity) {
+        if (entity == null) {
+            return null; // Handle the case where the entity is null
+        }
+
+        Plant plant = new Plant();
+        plant.setId(entity.getId());
+        plant.setName(entity.getName());
+        plant.setDescription(entity.getDescription());
+        plant.setWateringIntervalDays(entity.getWateringIntervalDays());
+        plant.setNextWateringTime(entity.getNextWateringTime());
+
+        return plant;
     }
 
 }

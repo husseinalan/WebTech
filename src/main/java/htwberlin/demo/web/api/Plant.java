@@ -4,11 +4,24 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 
+import java.time.LocalDateTime;
+
 @Entity
 public class Plant {
     private String name;
     private String description;
     private int wateringIntervalDays;
+
+    public LocalDateTime getNextWateringTime() {
+        return nextWateringTime;
+    }
+
+    public void setNextWateringTime(LocalDateTime nextWateringTime) {
+        this.nextWateringTime = nextWateringTime;
+    }
+
+    private LocalDateTime nextWateringTime;
+
 
     @Lob
     private byte[] image;

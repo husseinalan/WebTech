@@ -1,29 +1,27 @@
 package htwberlin.demo.web;
 
+import htwberlin.demo.service.ReminderService;
 import htwberlin.demo.web.api.Plant;
 import htwberlin.demo.service.PlantService;
 import htwberlin.demo.web.api.PlantManipulationRequest;
-import org.springframework.http.HttpStatus;
+import htwberlin.demo.web.api.ReminderRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
 public class PlantRestController {
-
-    private List<Plant> plants;
+    private final ReminderService reminderService;
 
     private final PlantService plantService; // Repository-Injektion ermöglichen
-
-    public PlantRestController(PlantService plantService) {
+    public PlantRestController(ReminderService reminderService, PlantService plantService) {
+        this.reminderService = reminderService;
         this.plantService = plantService;
     }
 
@@ -49,6 +47,22 @@ public class PlantRestController {
     public ResponseEntity<Plant> updatePlant(@PathVariable Long id, @RequestBody PlantManipulationRequest request) {
         var plant = plantService.update(id, request);
         return plant != null ? ResponseEntity.ok(plant) : ResponseEntity.notFound().build();
+    }
+    @PostMapping(path = "/api/v1/plants/{id}/reminders")
+    public ResponseEntity<Void> setReminder(@PathVariable Long id, @RequestBody ReminderRequest reminderRequest) {
+        // Extrahieren der Daten aus dem ReminderRequest
+        LocalDateTime dateTime = reminderRequest.getDateTime();
+        String message = reminderRequest.getMessage();
+
+        // Rufe den Reminder-Service auf, um die Erinnerung zu setzen
+        boolean success = reminderService.setReminder(id, dateTime, message);
+
+        // Überprüfe, ob die Erinnerung erfolgreich gesetzt wurde
+        if (success) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @DeleteMapping(path = "/api/v1/plants/{id}")

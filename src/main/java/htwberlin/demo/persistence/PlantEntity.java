@@ -1,9 +1,7 @@
 package htwberlin.demo.persistence;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
-
 
 @Entity(name = "plants")
 public class PlantEntity {
@@ -22,19 +20,8 @@ public class PlantEntity {
     @Column(name = "watering_interval_days", nullable = false)
     private Integer wateringIntervalDays;
 
-    @Column(name = "image")
-    private byte[] image ;
-
-    private LocalDateTime nextWeteringTime ;
-
-    public LocalDateTime getNextWeteringTime() {
-        return nextWeteringTime;
-    }
-
-    public void setNextWeteringTime(LocalDateTime nextWeteringTime) {
-        this.nextWeteringTime = nextWeteringTime;
-    }
-
+    @Column(name = "next_watering_time")
+    private LocalDateTime nextWateringTime;
 
     public PlantEntity(String name, String description, Integer wateringIntervalDays) {
         this.name = name;
@@ -42,11 +29,15 @@ public class PlantEntity {
         this.wateringIntervalDays = wateringIntervalDays;
     }
 
-
     protected PlantEntity() {}
 
+    // Getter and setter methods for the id field
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -73,4 +64,11 @@ public class PlantEntity {
         this.wateringIntervalDays = wateringIntervalDays;
     }
 
+    public LocalDateTime getNextWateringTime() {
+        return nextWateringTime;
+    }
+
+    public void setNextWateringTime(LocalDateTime nextWateringTime) {
+        this.nextWateringTime = nextWateringTime;
+    }
 }
